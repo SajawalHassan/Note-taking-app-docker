@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FlowNote Design System - Modern, fluid note-taking experience */
+
+@layer base {
+  :root {
+    /* Core Background & Text */
+    --background: 220 20% 99%;
+    --foreground: 230 25% 10%;
+
+    /* Card System */
+    --card: 0 0% 100%;
+    --card-foreground: 230 25% 10%;
+    --card-hover: 220 15% 98%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 230 25% 10%;
+
+    /* Brand Colors - Deep Blue to Purple Gradient */
+    --primary: 235 70% 55%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 245 85% 70%;
+    
+    /* Secondary - Soft Purple */
+    --secondary: 260 25% 92%;
+    --secondary-foreground: 235 50% 25%;
+
+    /* Neutral Grays */
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 45%;
+
+    /* Accent - Warm Coral */
+    --accent: 15 85% 65%;
+    --accent-foreground: 0 0% 98%;
+    --accent-soft: 15 50% 95%;
+
+    /* Status Colors */
+    --success: 142 76% 50%;
+    --warning: 45 93% 58%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Interactive Elements */
+    --border: 220 15% 90%;
+    --input: 220 15% 96%;
+    --ring: 235 70% 55%;
+
+    /* Note Categories */
+    --category-work: 210 85% 60%;
+    --category-personal: 260 75% 65%;
+    --category-ideas: 45 90% 60%;
+    --category-tasks: 142 70% 55%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(15 75% 70%));
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px hsl(var(--primary) / 0.05);
+    --shadow-md: 0 4px 12px hsl(var(--primary) / 0.1);
+    --shadow-lg: 0 12px 24px hsl(var(--primary) / 0.15);
+    --shadow-glow: 0 0 24px hsl(var(--primary-glow) / 0.4);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode optimized for focus and readability */
+    --background: 230 25% 8%;
+    --foreground: 220 15% 95%;
+
+    --card: 230 20% 10%;
+    --card-foreground: 220 15% 95%;
+    --card-hover: 230 20% 12%;
+
+    --popover: 230 20% 10%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 245 85% 70%;
+    --primary-foreground: 230 25% 8%;
+    --primary-glow: 245 95% 80%;
+
+    --secondary: 230 15% 15%;
+    --secondary-foreground: 220 15% 90%;
+
+    --muted: 230 15% 12%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 15 85% 65%;
+    --accent-foreground: 230 25% 8%;
+    --accent-soft: 15 25% 15%;
+
+    --success: 142 76% 50%;
+    --warning: 45 93% 58%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 15% 95%;
+
+    --border: 230 15% 18%;
+    --input: 230 15% 15%;
+    --ring: 245 85% 70%;
+
+    --category-work: 210 85% 65%;
+    --category-personal: 260 75% 70%;
+    --category-ideas: 45 90% 65%;
+    --category-tasks: 142 70% 60%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(15 75% 70%));
+    
+    --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.2);
+    --shadow-md: 0 4px 12px hsl(0 0% 0% / 0.3);
+    --shadow-lg: 0 12px 24px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 24px hsl(var(--primary-glow) / 0.3);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+@layer components {
+  /* Note Card Animations */
+  .note-card {
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-[1.02] hover:shadow-lg;
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-sm);
+  }
+
+  .note-card:hover {
+    background: hsl(var(--card-hover));
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Floating Action Button */
+  .fab {
+    @apply fixed bottom-6 right-6 z-50;
+    @apply w-14 h-14 rounded-full shadow-lg;
+    @apply flex items-center justify-center;
+    @apply transition-all duration-300 ease-out;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .fab:hover {
+    @apply scale-110;
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Page Transitions */
+  .page-transition {
+    @apply opacity-0 translate-y-4;
+    animation: pageEnter 0.4s ease-out forwards;
+  }
+
+  @keyframes pageEnter {
+    to {
+      @apply opacity-100 translate-y-0;
+    }
+  }
+
+  /* Category Pills */
+  .category-pill {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .category-work { background: hsl(var(--category-work) / 0.15); color: hsl(var(--category-work)); }
+  .category-personal { background: hsl(var(--category-personal) / 0.15); color: hsl(var(--category-personal)); }
+  .category-ideas { background: hsl(var(--category-ideas) / 0.15); color: hsl(var(--category-ideas)); }
+  .category-tasks { background: hsl(var(--category-tasks) / 0.15); color: hsl(var(--category-tasks)); }
+
+  /* Glass effect */
+  .glass {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+}
