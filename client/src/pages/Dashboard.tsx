@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Plus, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { AppLayout } from '@/components/layout/AppLayout';
-import { SearchAndFilter } from '@/components/notes/SearchAndFilter';
-import { NotesGrid } from '@/components/notes/NotesGrid';
-import { Button } from '@/components/ui/button';
-import { useNotes } from '@/hooks/useNotes';
-import { NoteFilters } from '@/types/note';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { Plus, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AppLayout } from "@/components/layout/AppLayout";
+import { SearchAndFilter } from "@/components/notes/SearchAndFilter";
+import { NotesGrid } from "@/components/notes/NotesGrid";
+import { Button } from "@/components/ui/button";
+import { useNotes } from "@/hooks/useNotes";
+import { NoteFilters } from "@/types/note";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const { notes, loading, deleteNote, togglePin, filterNotes } = useNotes();
@@ -29,11 +29,11 @@ export default function Dashboard() {
 
   const handlePin = (id: string) => {
     togglePin(id);
-    const note = notes.find(n => n.id === id);
+    const note = notes.find((n) => n.id === id);
     toast({
       title: note?.isPinned ? "Note unpinned" : "Note pinned",
-      description: note?.isPinned 
-        ? "Note removed from pinned notes." 
+      description: note?.isPinned
+        ? "Note removed from pinned notes."
         : "Note pinned to the top.",
     });
   };
