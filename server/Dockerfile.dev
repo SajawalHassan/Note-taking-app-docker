@@ -10,4 +10,8 @@ RUN npm i
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "dev" ]
+# For Prisma
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
+CMD [ "/app/docker-entrypoint.sh" ]
