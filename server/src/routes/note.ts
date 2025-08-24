@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const router = Router();
 const prisma = new PrismaClient();
 
-// ✅ Create a note
+// Create a note
 router.post("/", async (req, res) => {
   try {
     const { title, content, category, tags, isPinned, color } = req.body;
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// ✅ Get all notes
+// Get all notes
 router.get("/", async (_req, res) => {
   try {
     const notes = await prisma.note.findMany({
@@ -36,7 +36,7 @@ router.get("/", async (_req, res) => {
   }
 });
 
-// ✅ Get a single note by ID
+// Get a single note by ID
 router.get("/:id", async (req, res) => {
   try {
     const note = await prisma.note.findUnique({
@@ -49,7 +49,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// ✅ Update a note
+// Update a note
 router.put("/:id", async (req, res) => {
   try {
     const { title, content, category, tags, isPinned, color } = req.body;
@@ -63,7 +63,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// ✅ Delete a note
+// Delete a note
 router.delete("/:id", async (req, res) => {
   try {
     await prisma.note.delete({

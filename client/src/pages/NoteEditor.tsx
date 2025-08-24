@@ -72,7 +72,7 @@ export default function NoteEditor() {
     }
   }, [title, content, category, tagsInput, isPinned, currentNote, isNew]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim() && !content.trim()) {
       toast({
         title: "Cannot save empty note",
@@ -96,7 +96,7 @@ export default function NoteEditor() {
     };
 
     if (isNew) {
-      const newNote = createNote(noteData);
+      const newNote = await createNote(noteData);
       toast({
         title: "Note created",
         description: "Your new note has been saved successfully.",

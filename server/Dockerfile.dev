@@ -10,6 +10,9 @@ RUN npm i
 
 EXPOSE 3000
 
+# Install pg_utility
+RUN apt-get update && apt-get install -y postgresql-client
+
 # For Prisma
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh

@@ -18,6 +18,8 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+    depends_on:
+      - db
 
   client:
     container_name: client-notes-app

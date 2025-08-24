@@ -1,106 +1,86 @@
 import { useState, useEffect } from "react";
 import { Note, NoteFilters } from "@/types/note";
 
-const NOTES_STORAGE_KEY = "flownote-notes";
-
-const sampleNotes: Note[] = [
-  {
-    id: "1",
-    title: "Welcome to FlowNote",
-    content:
-      "This is your first note! FlowNote helps you capture and organize your thoughts with beautiful animations and smooth interactions. Try creating a new note by clicking the + button.",
-    category: "personal",
-    tags: ["welcome", "getting-started"],
-    createdAt: new Date("2024-01-15T10:30:00"),
-    updatedAt: new Date("2024-01-15T10:30:00"),
-    isPinned: true,
-  },
-  {
-    id: "2",
-    title: "Project Ideas",
-    content:
-      "Brainstorming session for new features:\n\n- Real-time collaboration\n- Voice notes\n- AI-powered categorization\n- Cross-device sync\n- Rich text formatting",
-    category: "ideas",
-    tags: ["brainstorm", "features"],
-    createdAt: new Date("2024-01-14T15:45:00"),
-    updatedAt: new Date("2024-01-14T16:20:00"),
-    isPinned: false,
-  },
-  {
-    id: "3",
-    title: "Meeting Notes - Q1 Planning",
-    content:
-      "Key decisions from today's planning meeting:\n\n1. Focus on user experience improvements\n2. Implement dark mode by March\n3. Add mobile responsiveness\n4. User testing scheduled for February",
-    category: "work",
-    tags: ["meeting", "planning", "q1"],
-    createdAt: new Date("2024-01-13T09:15:00"),
-    updatedAt: new Date("2024-01-13T11:30:00"),
-    isPinned: false,
-  },
-];
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api/notes";
 
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load notes from localStorage on mount
+  // Load notes from server on mount
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(NOTES_STORAGE_KEY);
-      if (stored) {
-        const parsedNotes = JSON.parse(stored).map((note: any) => ({
-          ...note,
-          createdAt: new Date(note.createdAt),
-          updatedAt: new Date(note.updatedAt),
-        }));
-        setNotes(parsedNotes);
-      } else {
-        // Initialize with sample notes
-        setNotes(sampleNotes);
-        localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(sampleNotes));
+    const fetchNotes = async () => {
+      try {
+        const res = await fetch(API_URL);
+        const data: Note[] = await res.json();
+        setNotes(
+          data.map((note) => ({
+            ...note,
+            createdAt: new Date(note.createdAt),
+            updatedAt: new Date(note.updatedAt),
+          }))
+        );
+      } catch (error) {
+        console.error("Failed to load notes:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Failed to load notes:", error);
-      setNotes(sampleNotes);
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    fetchNotes();
   }, []);
 
-  // Save notes to localStorage whenever notes change
-  useEffect(() => {
-    if (!loading && notes.length > 0) {
-      localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
-    }
-  }, [notes, loading]);
-
-  const createNote = (
+  const createNote = async (
     noteData: Omit<Note, "id" | "createdAt" | "updatedAt">
   ) => {
-    const newNote: Note = {
-      id: crypto.randomUUID(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      ...noteData,
-    };
-    setNotes((prev) => [newNote, ...prev]);
-    return newNote;
+    console.log(noteData);
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(noteData),
+      });
+      const newNote: Note = await res.json();
+      newNote.createdAt = new Date(newNote.createdAt);
+      newNote.updatedAt = new Date(newNote.updatedAt);
+      setNotes((prev) => [newNote, ...prev]);
+      return newNote;
+    } catch (error) {
+      console.error("Failed to create note:", error);
+    }
   };
 
-  const updateNote = (id: string, updates: Partial<Note>) => {
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === id ? { ...note, ...updates, updatedAt: new Date() } : note
-      )
-    );
+  const updateNote = async (id: string, updates: Partial<Note>) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+      const updatedNote: Note = await res.json();
+      updatedNote.updatedAt = new Date(updatedNote.updatedAt);
+      setNotes((prev) =>
+        prev.map((note) => (note.id === id ? updatedNote : note))
+      );
+    } catch (error) {
+      console.error("Failed to update note:", error);
+    }
   };
 
-  const deleteNote = (id: string) => {
-    setNotes((prev) => prev.filter((note) => note.id !== id));
+  const deleteNote = async (id: string) => {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      setNotes((prev) => prev.filter((note) => note.id !== id));
+    } catch (error) {
+      console.error("Failed to delete note:", error);
+    }
   };
 
-  const togglePin = (id: string) => {
-    updateNote(id, { isPinned: !notes.find((n) => n.id === id)?.isPinned });
+  const togglePin = async (id: string) => {
+    const note = notes.find((n) => n.id === id);
+    if (!note) return;
+    await updateNote(id, { isPinned: !note.isPinned });
   };
 
   const filterNotes = (filters: NoteFilters) => {
