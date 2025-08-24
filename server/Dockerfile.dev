@@ -1,20 +1,17 @@
 FROM node:20
 
+RUN apt-get update && apt-get install -y postgresql-client
+
 WORKDIR /app
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-COPY tsconfig.json tsconfig.json
 
 RUN npm i
 
-EXPOSE 3000
+COPY docker-entrypoint.sh docker-entrypoint.sh
+RUN chmod u+x docker-entrypoint.sh
 
-# Install pg_utility
-RUN apt-get update && apt-get install -y postgresql-client
+EXPOSE 5000
 
-# For Prisma
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
-
-CMD [ "/app/docker-entrypoint.sh" ]
+CMD [ "bash", "./docker-entrypoint.sh" ]

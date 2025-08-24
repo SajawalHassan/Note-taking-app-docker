@@ -1,16 +1,16 @@
-#!/bin/sh
-set -e
+#!/bin/bash
 
-echo "⏳ Waiting for Postgres to be ready..."
+echo "Checking for Database..."
 until pg_isready -h db -p 5432; do
-  sleep 1
+    sleep 1
 done
 
-echo "⚡ Running Prisma migrations..."
+echo "Running migrations..."
 npx prisma migrate deploy
 
-echo "⚙️ Generating Prisma client..."
+
+echo "Generating client..."
 npx prisma generate
 
-echo "🚀 Starting server..."
+echo "Starting development server..."
 npm run dev

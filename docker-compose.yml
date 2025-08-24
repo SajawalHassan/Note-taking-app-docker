@@ -1,12 +1,11 @@
 services:
   db:
+    container_name: db-notes-app
     image: postgres:16
     environment:
-      - POSTGRES_USER=sajawal
+      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=default
-    ports:
-      - "5432:5432"
+      - POSTGRES_DB=db
 
   server:
     container_name: server-notes-app
@@ -14,10 +13,10 @@ services:
       context: ./server
       dockerfile: Dockerfile.dev
     ports:
-      - "5000:3000"
+      - "5000:5000"
     volumes:
-      - ./server:/app
-      - /app/node_modules
+      - "./server:/app"
+      - "/app/node_modules"
     depends_on:
       - db
 
@@ -29,5 +28,7 @@ services:
     ports:
       - "3000:8080"
     volumes:
-      - ./client:/app
-      - /app/node_modules
+      - "./client:/app"
+      - "/app/node_modules"
+    depends_on:
+      - server
