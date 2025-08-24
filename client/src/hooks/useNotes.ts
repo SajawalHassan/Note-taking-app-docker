@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { Note, NoteFilters } from "@/types/note";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api/notes";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost/api/notes";
 
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -34,7 +33,6 @@ export function useNotes() {
   const createNote = async (
     noteData: Omit<Note, "id" | "createdAt" | "updatedAt">
   ) => {
-    console.log(noteData);
     try {
       const res = await fetch(API_URL, {
         method: "POST",
