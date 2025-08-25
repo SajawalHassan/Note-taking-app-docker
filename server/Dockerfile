@@ -7,9 +7,13 @@ WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
-RUN npm i
+RUN npm ci
 
-COPY docker-entrypoint.dev.sh docker-entrypoint.dev.sh
-RUN chmod u+x docker-entrypoint.dev.sh
+COPY . .
 
-CMD [ "bash", "./docker-entrypoint.dev.sh" ]
+RUN npm run build
+
+COPY docker-entrypoint.sh docker-entrypoint.sh
+RUN chmod u+x docker-entrypoint.sh
+
+CMD [ "./docker-entrypoint.sh" ]
