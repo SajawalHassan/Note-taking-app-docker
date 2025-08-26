@@ -1,0 +1,29 @@
+services:
+  db:
+    container_name: db-notes-app-prod
+    image: postgres:16
+    env_file:
+      - .env.prod
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+
+  server:
+    container_name: server-notes-app-prod
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    env_file:
+      - .env.prod
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+
+  client:
+    container_name: client-notes-app-prod
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+
+volumes:
+  pgdata:

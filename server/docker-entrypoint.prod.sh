@@ -12,4 +12,4 @@ npx prisma migrate deploy
 npx prisma generate
 
 echo "⏳ Starting server..."
-npm run dev
+node dist/index.js

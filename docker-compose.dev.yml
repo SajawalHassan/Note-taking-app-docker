@@ -1,40 +1,37 @@
 services:
   db:
-    container_name: db-notes-app
+    container_name: db-notes-app-dev
     image: postgres:16
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=db
+    env_file:
+      - .env.dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   server:
-    container_name: server-notes-app
+    container_name: server-notes-app-dev
     build:
       context: ./server
       dockerfile: Dockerfile.dev
+    env_file:
+      - .env.dev
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+    ports:
+      - "5000:5000"
     volumes:
       - "./server:/app"
       - "/app/node_modules"
-    depends_on:
-      - db
 
   client:
-    container_name: client-notes-app
+    container_name: client-notes-app-dev
     build:
       context: ./client
       dockerfile: Dockerfile.dev
+    ports:
+      - "3000:8080"
     volumes:
       - "./client:/app"
       - "/app/node_modules"
-    depends_on:
-      - server
 
-  nginx:
-    container_name: nginx-notes-app
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile.dev
-    ports:
-      - "80:80"
-    depends_on:
-      - client
+volumes:
+  pgdata:

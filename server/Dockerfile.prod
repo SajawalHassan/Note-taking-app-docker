@@ -10,10 +10,11 @@ COPY package-lock.json package-lock.json
 RUN npm ci
 
 COPY . .
-
 RUN npm run build
 
-COPY docker-entrypoint.sh docker-entrypoint.sh
-RUN chmod u+x docker-entrypoint.sh
+COPY docker-entrypoint.prod.sh docker-entrypoint.prod.sh
+RUN chmod u+x docker-entrypoint.prod.sh
 
-CMD [ "./docker-entrypoint.sh" ]
+EXPOSE 5000
+
+CMD [ "bash", "./docker-entrypoint.prod.sh" ]
