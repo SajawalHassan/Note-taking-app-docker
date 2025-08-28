@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  containerize:
+  server:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,18 +19,12 @@ jobs:
         run: |
           cd server
           npm ci
-          cd ../client
-          npm ci
 
       - name: Containerize server
         run: docker build -f ./server/Dockerfile.prod -t server-notes-app:latest ./server
-      - name: Containerize client
-        run: docker build -f ./client/Dockerfile.prod -t client-notes-app:latest ./client
 
       - name: Tag the images
-        run: |
-          docker tag server-notes-app:latest sajawal1f12/server-notes-app:latest
-          docker tag client-notes-app:latest sajawal1f12/client-notes-app:latest
+        run: docker tag server-notes-app:latest sajawal1f12/server-notes-app:latest
 
       - name: Login
         uses: docker/login-action@v3
@@ -41,4 +35,34 @@ jobs:
       - name: Push to Docker
         run: |
           docker push sajawal1f12/server-notes-app:latest
+
+  client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+
+      - name: Install deps
+        run: |
+          cd client
+          npm ci
+
+      - name: Containerize client
+        run: docker build -f ./client/Dockerfile.prod -t client-notes-app:latest ./client
+
+      - name: Tag the images
+        run: docker tag client-notes-app:latest sajawal1f12/client-notes-app:latest
+
+      - name: Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker
+        run: |
           docker push sajawal1f12/client-notes-app:latest
