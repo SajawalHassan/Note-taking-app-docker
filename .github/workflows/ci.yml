@@ -18,6 +18,12 @@ jobs:
       - name: Setup
         uses: actions/setup-node@v4
 
+      - name: Cache deps
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles(format('{0}/package-lock.json', matrix.service)) }}
+
       - name: Install deps
         run: |
           cd ${{ matrix.service }}
