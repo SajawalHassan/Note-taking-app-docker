@@ -6,9 +6,9 @@ on:
 
 jobs:
   server:
+    runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ${{ github.sha }}
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -42,6 +42,8 @@ jobs:
 
   client:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout code
