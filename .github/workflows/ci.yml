@@ -39,5 +39,5 @@ jobs:
           docker tag ${{ matrix.service }}-notes-app sajawal1f12/${{ matrix.service }}-notes-app:latest
           docker tag ${{ matrix.service }}-notes-app sajawal1f12/${{ matrix.service }}-notes-app:${{ github.sha }}
 
-          docker push ${{ matrix.service }}-notes-app sajawal1f12/${{ matrix.service }}-notes-app:latest
-          docker push ${{ matrix.service }}-notes-app sajawal1f12/${{ matrix.service }}-notes-app:${{ github.sha }}
+          docker push sajawal1f12/${{ matrix.service }}-notes-app:latest
+          docker push sajawal1f12/${{ matrix.service }}-notes-app:${{ github.sha }}
