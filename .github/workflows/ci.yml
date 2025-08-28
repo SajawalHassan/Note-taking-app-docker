@@ -23,9 +23,9 @@ jobs:
           npm ci
 
       - name: Containerize server
-        run: docker build -f ./server/Dockerfile.prod -t server-notes-app:latest
+        run: docker build -f ./server/Dockerfile.prod -t server-notes-app:latest ./server
       - name: Containerize client
-        run: docker build -f ./client/Dockerfile.prod -t client-notes-app:latest
+        run: docker build -f ./client/Dockerfile.prod -t client-notes-app:latest ./client
 
       - name: Tag the images
         run: |
