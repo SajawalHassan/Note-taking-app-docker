@@ -15,8 +15,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup
+
+      - name: Setup Node
         uses: actions/setup-node@v4
+
+      - name: Setup QEMU for Docker
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Cache deps
         uses: actions/cache@v4
