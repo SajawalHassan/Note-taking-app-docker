@@ -15,6 +15,6 @@ app.use(
 
 app.use("/api/notes", notesRouter);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is now running on http://localhost:${PORT}`);
 });
