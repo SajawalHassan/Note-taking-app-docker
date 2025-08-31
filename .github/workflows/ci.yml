@@ -59,13 +59,18 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy to GCP VM
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.GCP_VM_IP }}
-          username: ${{ secrets.GCP_VM_USER }}
-          key: ${{ secrets.GCP_VM_SSH_KEY }}
-          script: |
-            cd ~/website
-            docker-compose pull
-            docker-compose up -d --remove-orphans
+          ssh-private-key: ${{ secrets.GCP_SSH_KEY }}
+
+      - name: Deploy to GCP VM
+        run: |
+          ssh -o StrictHostKeyChecking=no sajawalhassan_1feb@34.123.231.175 "
+            cd /home/sajwalhassan_1feb/website &&
+            docker-compose pull &&
+            docker-compose up -d
+          "
