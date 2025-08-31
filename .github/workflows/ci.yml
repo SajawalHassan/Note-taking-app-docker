@@ -71,6 +71,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no sajawalhassan_1feb@34.123.231.175 "
             cd /home/sajawalhassan_1feb/website &&
-            docker-compose pull &&
-            docker-compose up -d
+            docker compose pull &&
+            docker compose up -d
           "
