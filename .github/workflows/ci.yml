@@ -70,7 +70,7 @@ jobs:
       - name: Deploy to GCP VM
         run: |
           ssh -o StrictHostKeyChecking=no sajawalhassan_1feb@34.123.231.175 "
-            cd /home/sajwalhassan_1feb/website &&
+            cd /home/sajawalhassan_1feb/website &&
             docker-compose pull &&
             docker-compose up -d
           "
