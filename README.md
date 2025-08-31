@@ -19,7 +19,7 @@ A simple note-taking application designed to learn and implement modern DevOps p
   - Matrix strategy to build frontend and backend images.
   - Utilizes QEMU and Buildx for multi-architecture builds.
   - Caching of npm dependencies to speed up builds.
-  - Pushes images to Docker Hub with `:cache` tags.
+  - Pushes images to Docker Hub with `:cache`, SSH, and the `latest` tags.
   - Deploys the latest version to a GCP virtual machine via SSH.
 
 - **Cloud Deployment**:
