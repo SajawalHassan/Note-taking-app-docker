@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Note, NoteFilters } from "@/types/note";
 
-const API_URL = "http://localhost/api/notes"; // Change this according to dev or prod (idk how to pass env vars to this shit yet)
+const API_URL = "/api/notes"; // Change this according to dev or prod (idk how to pass env vars to this shit yet)
 
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
