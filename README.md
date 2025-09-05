@@ -96,7 +96,7 @@ The GitHub Actions workflow automates the following:
 - **Push**:
 
   - Logs into Docker Hub.
-  - Pushes images with `:cache` tags.
+  - Pushes images with `:cache`, `:latest` and `:SHA` tags.
 
 - **Deploy**:
 
