@@ -2,7 +2,7 @@
 
 # Wait for PostgreSQL to be ready
 echo "⏳ Waiting for PostgreSQL to be ready..."
-until pg_isready -h "db" -p "5432"; do
+until pg_isready -h $PRIVATE_IP -p "5432"; do
     echo "Waiting for PostgreSQL..."
     sleep 2
 done
