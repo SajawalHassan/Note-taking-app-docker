@@ -56,37 +56,29 @@ resource "google_compute_instance" "frontend-vm" {
     startup-script = <<-EOT
     #!/bin/bash
     set -e
-
     echo "[*] Updating system..."
-    sudo apt update -y
-    sudo apt upgrade -y
+    apt-get update -y
+    apt-get upgrade -y
 
     echo "[*] Installing prerequisites..."
-    sudo apt install -y ca-certificates curl gnupg lsb-release
+    apt-get install -y ca-certificates curl gnupg lsb-release
 
     echo "[*] Adding Docker's official GPG key..."
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    mkdir -m 0755 -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-    echo "[*] Setting up Docker repository..."
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "[*] Setting up Docker repo..."
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+    https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-    echo "[*] Installing Docker Engine and Docker Compose plugin..."
-    sudo apt update -y
-    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    apt-get update -y
 
-    echo "[*] Enabling Docker service..."
-    sudo systemctl enable docker
-    sudo systemctl start docker
+    echo "[*] Installing Docker + Compose..."
+    apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    echo "[*] Installation complete!"
-    echo "--------------------------------------------"
-    echo "Docker version:"
-    docker --version
-    echo "Docker Compose version:"
-    docker compose version
+    echo "[*] Enabling Docker..."
+    systemctl enable docker
+    systemctl start docker
 
     EOT
   }
@@ -170,6 +162,63 @@ resource "google_compute_instance" "backend-vm" {
       echo "[*] Enabling Docker..."
       systemctl enable docker
       systemctl start docker
+      EOF
+    EOT
+  }
+}
+
+# DATABASE
+resource "google_compute_instance" "db-vm" {
+  name = "note-app-db-vm"
+  machine_type = "e2-micro"
+  zone = "us-central1-a"
+
+  tags = ["backend-vms"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+      size = 20
+      type = "pd-balanced"
+    }
+  }
+
+  network_interface {
+    subnetwork = google_compute_subnetwork.backend-subnet.id
+
+    access_config {
+      
+    }
+  }
+
+  metadata = {
+    startup-script = <<-EOT
+      #!/bin/bash
+      set -e
+      echo "[*] Updating system..."
+      apt-get update -y
+      apt-get upgrade -y
+
+      echo "[*] Installing prerequisites..."
+      apt-get install -y ca-certificates curl gnupg lsb-release
+
+      echo "[*] Adding Docker's official GPG key..."
+      mkdir -m 0755 -p /etc/apt/keyrings
+      curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+      echo "[*] Setting up Docker repo..."
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+      https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+
+      apt-get update -y
+
+      echo "[*] Installing Docker + Compose..."
+      apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+      echo "[*] Enabling Docker..."
+      systemctl enable docker
+      systemctl start docker
+      EOF
     EOT
   }
 }
